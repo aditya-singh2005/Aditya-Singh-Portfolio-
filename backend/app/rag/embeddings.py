@@ -1,0 +1,9 @@
+from langchain_huggingface import HuggingFaceEmbeddings
+
+MODEL_NAME = "BAAI/bge-small-en-v1.5"
+
+
+def get_embedding_model():
+    return HuggingFaceEmbeddings(
+        model_name=MODEL_NAME
+    )
