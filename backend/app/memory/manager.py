@@ -4,7 +4,7 @@ from time import time
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 
 
-MAX_MESSAGES = 10          # Last 5 user/assistant exchanges
+MAX_MESSAGES = 20          # Last 10 user/assistant exchanges
 SESSION_TIMEOUT = 30 * 60  # 30 minutes
 
 
