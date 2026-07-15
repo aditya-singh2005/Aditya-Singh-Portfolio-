@@ -65,6 +65,7 @@ export default function Header() {
   return (
     <header
       className="
+        relative z-50
         w-full
         bg-transparent
         flex justify-between items-center
