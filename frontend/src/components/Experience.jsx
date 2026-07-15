@@ -6,14 +6,14 @@ const experiences = [
     id: 1,
     role: 'CONSULTANT INTERN',
     company: 'Delhi Police Public Library',
-    companyLink: '#',
+    companyLink: 'https://delhipolicepubliclibrary.org/',
     date: 'July – Aug 2025',
     bgImage: '/card5.png',
     logoImage: '/delhi_police.png',
-    accentColor: '#818cf8',
+    accentColor: '#343434ff',
     points: [
-      'Assessed existing digital infrastructure and software workflows, identifying usability gaps and recommending concrete improvements through structured UI/UX evaluation.',
-      'Leveraged data-driven analysis to support research initiatives under the Shikhar Organisation, improving community digital engagement outcomes.',
+      'Assessed existing digital infrastructure and software workflows, identifying usability gaps and recommending concrete improvements through structured UI/UX evaluation',
+      'Leveraged data-driven analysis to support research initiatives under the Shikhar Organisation, improving community digital engagement outcomes',
     ],
     certificate: 'https://drive.google.com/file/d/1GoLtAJSNeRiwqoYzaJ3Z3sM1Bm0Rjom_/view',
   },
@@ -21,13 +21,14 @@ const experiences = [
     id: 2,
     role: 'INTERN',
     company: 'Vrikshit Foundation',
-    companyLink: '#',
+    companyLink: 'https://www.vrikshitfoundation.org/',
     date: 'July 2024 – Aug 2024',
     bgImage: '/card2.png',
     logoImage: '/v1.png',
-    accentColor: '#34d399',
+    accentColor: '#07ba78ff',
     points: [
-      'Contributed to community welfare by planting 50+ trees and organizing outreach data, increasing participation by 30%.',
+      'Planted 50+ trees and collected 10+ kg of waste during weekly plantation and cleanliness drives, supporting environmental sustainability.',
+      'Contributed to planning by researching potential collaborations and assisting in the development of future outreach projects.',
     ],
     certificate: 'https://drive.google.com/file/d/1pY26GfjZyd9bhkb2gtBHl--J9aZb-DK3/view',
   }
@@ -91,23 +92,16 @@ const SOFT_SHADOW =
 function ExperienceCard({ exp, isActive }) {
   const [flipped, setFlipped] = useState(false);
 
-  const handleClick = () => {
-    if (!isActive) return;
-    setFlipped((f) => !f);
-  };
-
   return (
     <div
       className={`relative shrink-0 select-none transition-all duration-500 ease-out ${CARD_CLASS}`}
       style={{
         perspective: '1600px',
-        cursor: isActive ? 'pointer' : 'default',
         opacity: isActive ? 1 : 0.35,
         transform: isActive ? 'scale(1)' : 'scale(0.84)',
         filter: isActive ? 'blur(0px)' : 'blur(1px)',
       }}
       data-experience-card
-      onClick={handleClick}
     >
       <div
         className="relative w-full h-full transition-transform duration-500 ease-out"
@@ -119,7 +113,14 @@ function ExperienceCard({ exp, isActive }) {
         {/* FRONT */}
         <div
           className="absolute inset-0 rounded-[1.25rem] sm:rounded-[1.5rem] lg:rounded-[1.75rem] overflow-hidden ring-1 ring-white/10"
-          style={{ backfaceVisibility: 'hidden', boxShadow: SOFT_SHADOW }}
+          style={{ 
+            backfaceVisibility: 'hidden', 
+            boxShadow: SOFT_SHADOW, 
+            cursor: isActive ? 'pointer' : 'default',
+            zIndex: flipped ? 0 : 1,
+            pointerEvents: flipped ? 'none' : 'auto'
+          }}
+          onClick={() => { if (isActive && !flipped) setFlipped(true); }}
         >
           <img
             src={exp.bgImage}
@@ -205,28 +206,42 @@ function ExperienceCard({ exp, isActive }) {
 
         {/* BACK */}
         <div
-          className="absolute inset-0 rounded-[1.25rem] sm:rounded-[1.5rem] lg:rounded-[1.75rem] overflow-hidden bg-[#15161c] ring-1 ring-white/10"
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', boxShadow: SOFT_SHADOW }}
+          className="absolute inset-0 rounded-[1.25rem] sm:rounded-[1.5rem] lg:rounded-[1.75rem] overflow-hidden cursor-pointer bg-white"
+          style={{ 
+            backfaceVisibility: 'hidden', 
+            transform: 'rotateY(180deg)', 
+            boxShadow: SOFT_SHADOW,
+            border: `1px solid ${exp.accentColor}30`,
+            zIndex: flipped ? 1 : 0,
+            pointerEvents: flipped ? 'auto' : 'none'
+          }}
+          onClick={() => { if (flipped) setFlipped(false); }}
         >
-          <div style={{ height: 'clamp(0.35rem, 0.5vw, 0.5rem)' }} className="w-full">
+          {/* TINT OVERLAY */}
+          <div 
+            className="absolute inset-0" 
+            style={{ backgroundColor: `${exp.accentColor}15` }} 
+          />
+
+          <div style={{ height: 'clamp(0.35rem, 0.5vw, 0.5rem)' }} className="w-full relative z-10">
             <div className="w-full h-full" style={{ background: exp.accentColor }} />
           </div>
 
           <div
-            className="flex flex-col"
+            className="flex flex-col relative z-10"
             style={{ padding: 'clamp(0.9rem, 2.2vw, 1.5rem)', height: 'calc(100% - 8px)' }}
           >
             <div className="flex items-start justify-between gap-3 mb-2 sm:mb-3">
               <div className="min-w-0">
                 <p
-                  className="uppercase tracking-widest text-white/40"
-                  style={{ fontSize: 'clamp(0.55rem, 0.75vw, 0.688rem)' }}
+                  className="uppercase tracking-widest text-slate-500 font-bold"
+                  style={{ fontSize: 'clamp(0.45rem, 0.65vw, 0.6rem)' }}
                 >
                   Role
                 </p>
                 <h5
-                  className="text-white font-bold leading-tight mt-0.5 truncate"
-                  style={{ fontSize: 'clamp(0.8rem, 1.3vw, 1.125rem)' }}
+                  className="font-extrabold leading-tight mt-0.5 truncate"
+                  style={{ fontSize: 'clamp(0.75rem, 1.2vw, 1rem)', color: exp.accentColor }}
                 >
                   {exp.role}
                 </h5>
@@ -235,18 +250,22 @@ function ExperienceCard({ exp, isActive }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="mt-1 inline-flex items-center gap-1 underline underline-offset-2 font-semibold"
-                  style={{ color: exp.accentColor, fontSize: 'clamp(0.68rem, 1vw, 0.875rem)' }}
+                  className="mt-1 inline-flex items-center gap-1 font-bold text-slate-800 hover:opacity-80 transition-opacity"
+                  style={{ fontSize: 'clamp(0.6rem, 0.8vw, 0.75rem)' }}
                 >
                   {exp.company}
-                  <span className="material-symbols-outlined" style={{ fontSize: '0.85em' }}>open_in_new</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: '0.9em', color: exp.accentColor }}>open_in_new</span>
                 </a>
               </div>
               <span
-                className="shrink-0 font-mono text-slate-300 bg-white/10 rounded-full border border-white/15 whitespace-nowrap"
+                className="shrink-0 font-bold border whitespace-nowrap tracking-wide"
                 style={{
-                  fontSize: 'clamp(0.6rem, 0.85vw, 0.75rem)',
-                  padding: 'clamp(0.25rem, 0.5vw, 0.375rem) clamp(0.5rem, 1vw, 0.75rem)',
+                  fontSize: 'clamp(0.55rem, 0.75vw, 0.65rem)',
+                  padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.5rem, 1vw, 0.75rem)',
+                  backgroundColor: `${exp.accentColor}15`,
+                  color: exp.accentColor,
+                  borderColor: `${exp.accentColor}30`,
+                  borderRadius: '0.5rem'
                 }}
               >
                 {exp.date}
@@ -254,44 +273,51 @@ function ExperienceCard({ exp, isActive }) {
             </div>
 
             <ul
-              className="flex-1 overflow-y-auto pr-1 text-slate-200 leading-relaxed flex flex-col"
-              style={{ fontSize: 'clamp(0.68rem, 1vw, 0.875rem)', rowGap: 'clamp(0.5rem, 1vw, 0.75rem)' }}
+              className="flex-1 min-h-0 overflow-y-auto pr-2 text-slate-700 font-medium leading-relaxed flex flex-col mt-1 sm:mt-2 cursor-auto"
+              style={{ fontSize: 'clamp(0.6rem, 0.85vw, 0.75rem)', rowGap: 'clamp(0.5rem, 1vw, 0.75rem)' }}
+              onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               {exp.points.map((pt, i) => (
-                <li key={i} className="flex gap-2">
+                <li key={i} className="flex gap-2.5">
                   <span
                     className="rounded-full shrink-0"
-                    style={{ marginTop: '0.4em', width: '0.35em', height: '0.35em', background: exp.accentColor }}
+                    style={{ marginTop: '0.45em', width: '0.4em', height: '0.4em', background: exp.accentColor, boxShadow: `0 0 6px ${exp.accentColor}60` }}
                   />
                   <span>{pt}</span>
                 </li>
               ))}
             </ul>
 
-            <a
-              href={exp.certificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center justify-center gap-1.5 border rounded-full font-semibold"
-              style={{
-                marginTop: 'clamp(0.5rem, 1vw, 0.75rem)',
-                paddingBlock: 'clamp(0.35rem, 0.7vw, 0.625rem)',
-                fontSize: 'clamp(0.68rem, 1vw, 0.875rem)',
-                borderColor: exp.accentColor,
-                color: exp.accentColor,
-              }}
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '0.95em' }}>verified</span>
-              View Certificate
-            </a>
+            <div className="flex justify-start">
+              <a
+                href={exp.certificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg font-bold transition-all hover:-translate-y-[1px] active:translate-y-0 bg-white hover:bg-slate-100"
+                style={{
+                  marginTop: 'clamp(0.5rem, 1vw, 0.75rem)',
+                  paddingBlock: 'clamp(0.3rem, 0.6vw, 0.45rem)',
+                  paddingInline: 'clamp(0.7rem, 1.2vw, 1rem)',
+                  fontSize: 'clamp(0.6rem, 0.8vw, 0.7rem)',
+                  color: exp.accentColor,
+                  border: `2px solid ${exp.accentColor}40`,
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '1.2em' }}>workspace_premium</span>
+                View Certificate
+              </a>
+            </div>
           </div>
 
           <div
-            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-white/60"
-            style={{ bottom: 'clamp(0.5rem, 1vw, 0.75rem)', fontSize: 'clamp(0.6rem, 0.8vw, 0.75rem)' }}
+            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 font-bold z-10 cursor-pointer hover:opacity-100 transition-opacity"
+            style={{ bottom: 'clamp(0.4rem, 0.8vw, 0.6rem)', fontSize: 'clamp(0.55rem, 0.75vw, 0.65rem)', color: exp.accentColor, opacity: 0.9, padding: '0.5rem' }}
+            onClick={() => setFlipped(false)}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: '0.9em' }}>touch_app</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '1em' }}>touch_app</span>
             Tap to flip back
           </div>
         </div>
@@ -394,7 +420,13 @@ export default function Experience() {
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         <SectionHeading title="Experience" />
 
-        
+        <p 
+          className="text-white/60 animate-pulse font-medium tracking-wide flex flex-col items-center gap-1"
+          style={{ marginTop: 'clamp(0.5rem, 1.5vw, 1rem)', fontSize: 'clamp(0.7rem, 1vw, 0.85rem)' }}
+        >
+          <span>Keep scrolling to explore more</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '1.2em' }}>keyboard_arrow_down</span>
+        </p>
 
         <div
           ref={clipRef}
