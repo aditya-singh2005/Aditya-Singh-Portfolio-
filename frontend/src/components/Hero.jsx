@@ -73,34 +73,28 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden px-4">
+    <section className="relative flex flex-col items-center overflow-hidden px-4" style={{ minHeight: '100vh', marginTop: '-4rem', paddingTop: '4rem', justifyContent: 'center' }}>
 
-      {/* ── Diagonal tech tickers ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center" aria-hidden="true">
-        <div
-          className="absolute rotate-[-32deg] opacity-[0.11]"
-          style={{ whiteSpace: 'nowrap', width: '220vw', left: '-40vw', top: '35%' }}
-        >
-          <div className="ticker-animation flex gap-8">
-            {[...Array(2)].flatMap(() =>
-              ['Vercel KV', 'SQL', 'Redis', 'MobX', 'Redux', 'React Query', 'Zustand', 'Next.js', 'Express.js', 'Node.js', 'Prisma', 'Socket.io', 'GitHub', 'NPM', 'Yarn', 'JavaScript']
-            ).map((t, i) => (
-              <span key={i} className="font-mono text-xs tracking-wider text-zinc-600">— {t}</span>
-            ))}
-          </div>
-        </div>
-        <div
-          className="absolute rotate-[-32deg] opacity-[0.11]"
-          style={{ whiteSpace: 'nowrap', width: '220vw', right: '-80vw', top: '55%' }}
-        >
-          <div className="ticker-animation flex gap-8" style={{ animationDirection: 'reverse' }}>
-            {[...Array(2)].flatMap(() =>
-              ['HTML', 'CSS', 'Java', 'C', 'Markdown', 'Lua', 'Next.js', 'MikroTik', 'GraphQL', 'Svelte', 'TypeScript', 'MongoDB', 'Firebase', 'Tailwind CSS']
-            ).map((t, i) => (
-              <span key={i} className="font-mono text-xs tracking-wider text-zinc-600">— {t}</span>
-            ))}
-          </div>
-        </div>
+      {/* ── Ambient gradient orbs ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <motion.div
+          className="absolute rounded-full"
+          style={{ width: 560, height: 560, left: '5%', top: '10%', background: 'radial-gradient(circle, #6366f155 0%, transparent 70%)', filter: 'blur(72px)' }}
+          animate={{ scale: [1, 1.15, 1], x: [0, 25, 0], y: [0, -20, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute rounded-full"
+          style={{ width: 420, height: 420, right: '5%', top: '55%', background: 'radial-gradient(circle, #a855f755 0%, transparent 70%)', filter: 'blur(72px)' }}
+          animate={{ scale: [1, 1.2, 1], x: [0, -30, 0], y: [0, 20, 0] }}
+          transition={{ duration: 18, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute rounded-full"
+          style={{ width: 320, height: 320, right: '20%', top: '5%', background: 'radial-gradient(circle, #06b6d445 0%, transparent 70%)', filter: 'blur(60px)' }}
+          animate={{ scale: [1, 1.12, 1], x: [0, 15, -10, 0], y: [0, -15, 10, 0] }}
+          transition={{ duration: 16, delay: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+        />
       </div>
 
       {/* ── Centered Tilt Card ── */}
@@ -116,11 +110,9 @@ export default function Hero() {
           <div
             className="
               relative
-              w-[85vw] sm:w-30vw md:w-45vw lg:w-90vw h-[85vh]
+              w-[100vw] sm:w-30vw md:w-45vw lg:w-90vw h-[85vh]
               rounded-3xl
-              bg-white
-              shadow-[0_12px_80px_rgba(0,0,0,0.10)]
-              border border-zinc-100
+              bg-transparent
               flex flex-col items-center justify-center
               py-16 sm:py-20 md:py-28 lg:py-32
               px-2 gap-0
@@ -129,7 +121,7 @@ export default function Hero() {
           >
             {/* ── Name: ADITYA ── */}
             <p
-              className="font-bold uppercase leading-none gap-2 flex flex-wrap justify-center text-zinc-900"
+              className="font-bold uppercase leading-none hero-name-p"
               style={{
                 fontSize: 'clamp(4rem, 12vw, 8rem)',
                 transform: 'translateZ(50px)',
@@ -137,42 +129,20 @@ export default function Hero() {
                 fontFamily: "'Hanken Grotesk', sans-serif",
               }}
             >
-              {'ADITYA'.split('').map((char, i) => (
-                <span
-                  key={i}
-                  className={`hero-char relative transition-colors duration-200 hover:${CHAR_COLORS[i % CHAR_COLORS.length]}`}
-                >
-                  <span className="hero-char-indicator">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-5 h-5 sm:w-6 sm:h-6 spin-delayed"
-                    >
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 20l7-12H5z" />
-                    </svg>
-                  </span>
-                  {char}
-                </span>
-              ))}
+              <span className="hero-name-gradient">ADITYA</span>
             </p>
 
             {/* ── Name: SINGH (ghost) ── */}
             <p
-              className="mt-2 font-bold uppercase leading-none tracking-tighter flex flex-wrap justify-center text-zinc-900 select-none pointer-events-none"
+              className="mt-3 font-bold uppercase leading-none tracking-tighter hover:tracking-[0.15em] transition-all duration-800 ease-out flex flex-wrap justify-center text-zinc-900 select-none pointer-events-auto"
               style={{
                 fontSize: 'clamp(4rem, 12vw, 8rem)',
                 transform: 'translateZ(35px)',
                 transformStyle: 'preserve-3d',
                 fontFamily: "'Hanken Grotesk', sans-serif",
-                opacity: visible ? 0.2 : 0,
+                opacity: visible ? 0.3 : 0,
                 filter: visible ? 'blur(0px)' : 'blur(4px)',
-                transition: 'opacity 1s ease-in-out, filter 1s ease-in-out',
+                transition: 'opacity 1s ease-in-out, filter 1s ease-in-out, letter-spacing 0.5s ease-out',
               }}
             >
               {TRANSLATIONS[translationIndex]}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-
+import SectionHeading from './SectionHeading';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://aditya-singh-portfolio-production.up.railway.app';
 
 const initialLines = [
@@ -13,12 +13,51 @@ const initialLines = [
   },
 ];
 
+function TypewriterMessage({ text, instant, onComplete }) {
+  const [displayedText, setDisplayedText] = useState(instant ? text : '');
+  const [isDone, setIsDone] = useState(instant);
+  
+  useEffect(() => {
+    if (instant) {
+      setDisplayedText(text);
+      setIsDone(true);
+      return;
+    }
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(text.slice(0, i + 1));
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        setIsDone(true);
+        if (onComplete) onComplete();
+      }
+    }, 20); // typing speed
+    return () => clearInterval(interval);
+  }, [text, instant, onComplete]);
+
+  return (
+    <span>
+      {displayedText}
+      {!isDone && <span className="inline-block w-2 h-4 ml-1 bg-white/80 animate-pulse align-middle" />}
+    </span>
+  );
+}
+
 export default function Terminal() {
   const [lines, setLines] = useState(initialLines);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const inputRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  };
 
   const sessionKey = useMemo(() => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -57,9 +96,7 @@ export default function Terminal() {
     void clearSession();
   }, [sessionId]);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [isLoading, lines.length]);
+
 
   const clearTerminal = async () => {
     setLines(initialLines);
@@ -93,7 +130,7 @@ export default function Terminal() {
     event.preventDefault();
 
     const command = inputValue.trim();
-    if (!command || isLoading || !sessionId) {
+    if (!command || isLoading || isTyping || !sessionId) {
       return;
     }
 
@@ -129,16 +166,18 @@ export default function Terminal() {
       setLines((currentLines) => {
         const nextLines = [...currentLines];
         nextLines.pop();
-        nextLines.push({ role: 'assistant', text: payload?.response || 'No response returned.' });
+        nextLines.push({ role: 'assistant', text: payload?.response || 'No response returned.', isNew: true });
         return nextLines;
       });
+      setIsTyping(true);
     } catch (error) {
       setLines((currentLines) => {
         const nextLines = [...currentLines];
         nextLines.pop();
-        nextLines.push({ role: 'assistant', text: error.message || 'Something went wrong.' });
+        nextLines.push({ role: 'assistant', text: error.message || 'Something went wrong.', isNew: true });
         return nextLines;
       });
+      setIsTyping(true);
     } finally {
       setIsLoading(false);
     }
@@ -146,7 +185,8 @@ export default function Terminal() {
 
   return (
     <section className="px-margin-mobile mb-24 max-w-4xl mx-auto">
-      <div className="bg-terminal-bg rounded-xl overflow-hidden shadow-2xl border border-white/5">
+      <SectionHeading title="Ask Me Anything" />
+      <div className="bg-terminal-bg rounded-xl overflow-hidden shadow-2xl border border-white/5 mt-8">
         <div className="bg-[#323232] px-4 py-2 flex items-center justify-between gap-3">
           <div className="flex gap-2">
             <div className="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
@@ -163,8 +203,9 @@ export default function Terminal() {
           </button>
         </div>
 
-        <div className="p-6 font-terminal-text text-terminal-text text-white/90 space-y-3 h-[45vh] overflow-y-auto">
-          {lines.map((line, index) => {
+        <div className="relative">
+          <div ref={containerRef} className="p-6 font-terminal-text text-terminal-text text-white/90 space-y-3 h-[45vh] overflow-y-auto">
+            {lines.map((line, index) => {
             if (line.role === 'system') {
               return (
                 <p key={`${line.role}-${index}`} className="text-white/40">
@@ -187,7 +228,18 @@ export default function Terminal() {
             return (
               <p key={`${line.role}-${index}`} className={`whitespace-pre-wrap wrap-break-word ${line.pending ? 'text-secondary-fixed-dim' : 'text-white/80'}`}>
                 <span className="text-terminal-green">assistant@portfolio:</span>
-                <span className="text-primary-fixed-dim">~</span>$ {line.text}
+                <span className="text-primary-fixed-dim">~</span>$ {
+                  line.pending ? line.text : (
+                    <TypewriterMessage 
+                      text={line.text} 
+                      instant={!line.isNew} 
+                      onComplete={() => {
+                        setIsTyping(false);
+                        setLines((currentLines) => currentLines.map((l, i) => i === index ? { ...l, isNew: false } : l));
+                      }} 
+                    />
+                  )
+                }
               </p>
             );
           })}
@@ -200,14 +252,23 @@ export default function Terminal() {
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
               onKeyDown={handleSubmit}
-              disabled={isLoading}
-              placeholder={isLoading ? 'Thinking…' : 'Ask about Aditya Singh…'}
+              disabled={isLoading || isTyping}
+              placeholder={isLoading || isTyping ? 'Thinking…' : 'Ask about Aditya Singh…'}
               className="flex-1 bg-transparent outline-none text-white/90 placeholder:text-white/30 disabled:cursor-wait"
               autoComplete="off"
               spellCheck={false}
             />
           </div>
         </div>
+        
+        <button
+          onClick={scrollToBottom}
+          className="absolute bottom-6 right-6 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl transition-all z-10 group"
+          title="Scroll to bottom"
+        >
+          <span className="material-symbols-outlined text-lg group-hover:translate-y-0.5 transition-transform">arrow_downward</span>
+        </button>
+      </div>
       </div>
     </section>
   );

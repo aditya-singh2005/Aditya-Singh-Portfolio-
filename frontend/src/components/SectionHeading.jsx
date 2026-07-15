@@ -2,7 +2,7 @@
 export default function SectionHeading({ title }) {
   const letters = title.split('');
   return (
-    <div className="text-center text-5xl sm:text-7xl xl:text-8xl mb-12">
+    <div className="text-center text-3xl sm:text-5xl md:text-7xl xl:text-8xl mb-8 sm:mb-12">
       <ul className="nav-ul list-none p-0 m-0 inline-block">
         <li className="nav-li inline-block relative pb-4">
           <span className="nav-a relative inline-flex cursor-default select-none">

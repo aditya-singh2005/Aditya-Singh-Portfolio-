@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section className="mx-auto px-margin-mobile mb-24 text-center">
+    <section className="mt-10 mx-auto px-margin-mobile mb-24 text-center">
       <p className="font-headline-lg-mobile text-headline-lg-mobile mb-6">
         👋 Hey, I'm Aditya Singh, always building, learning, and shipping new ideas.
       </p>
