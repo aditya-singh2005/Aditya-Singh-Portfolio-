@@ -85,7 +85,7 @@ const ALL_PROJECTS = [
       'Extension',
       'Analytics'
     ],
-    color: '#361483ff',
+    color: '#361483',
   },
 
   {
