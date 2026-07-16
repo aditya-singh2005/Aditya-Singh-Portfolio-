@@ -17,7 +17,7 @@ const ALL_PROJECTS = [
       'Geofencing',
       'Mobile'
     ],
-    color: '#2563eb',
+    color: '#1864F3',
   },
 
   {
@@ -35,7 +35,7 @@ const ALL_PROJECTS = [
       'JWT',
       'Chart.js'
     ],
-    color: '#0f766e',
+    color: '#082dff',
   },
 
   {
@@ -52,7 +52,7 @@ const ALL_PROJECTS = [
       'JWT',
       'WebSockets'
     ],
-    color: '#16a34a',
+    color: '#8f51f9',
   },
 
   {
@@ -69,7 +69,7 @@ const ALL_PROJECTS = [
       'RBAC',
       'PostgreSQL'
     ],
-    color: '#7c3aed',
+    color: '#36437f',
   },
 
   {
@@ -85,7 +85,7 @@ const ALL_PROJECTS = [
       'Extension',
       'Analytics'
     ],
-    color: '#f59e0b',
+    color: '#361483ff',
   },
 
   {
@@ -101,7 +101,7 @@ const ALL_PROJECTS = [
       'Algorithms',
       'Visualization'
     ],
-    color: '#dc2626',
+    color: '#9b58fa',
   },
 
   {
@@ -119,13 +119,13 @@ const ALL_PROJECTS = [
       'Ranking',
       'AI'
     ],
-    color: '#1d4ed8',
+    color: '#ea47cf',
   },
   {
     title: 'Flipkart Gridlock AI',
     description:
       'Traffic prediction model developed for Flipkart Gridlock Hackathon using LightGBM, Group K-Fold validation, and feature engineering on real Bengaluru traffic data. Achieved an R² score of 0.916 and public leaderboard score of 89.66.',
-    url: '#',
+    url: 'https://colab.research.google.com/drive/1PORaZDFY0GdbMsJTCN7q3F5CnH-UWe4v?usp=sharing',
     github: 'https://github.com/aditya-singh2005/Flipkart-Gridlock-2.0-Bengaluru-Traffic-AI-Prediction',
     image: '/flipkart3.png',
     tags: [
@@ -135,7 +135,7 @@ const ALL_PROJECTS = [
       'Python',
       'Hackathon'
     ],
-    color: '#ea580c',
+    color: '#3b1ee2',
   },
 
   {
@@ -152,7 +152,7 @@ const ALL_PROJECTS = [
       'Scikit-learn',
       'Classification'
     ],
-    color: '#0ea5e9',
+    color: '#32ae16',
   },
 ];
 
